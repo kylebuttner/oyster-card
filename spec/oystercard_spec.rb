@@ -33,4 +33,23 @@ describe Oystercard do
     end
   end
 
+  describe "journey status" do
+
+    it 'should display journey status' do
+      expect(oystercard.in_journey?).to eq(false)
+    end
+
+    it 'should be true after touch in' do
+      oystercard.touch_in
+      expect(oystercard.in_journey?).to eq(true)
+    end
+
+    it 'should be false after touch out' do
+      oystercard.touch_in
+      oystercard.touch_out
+      expect(oystercard.in_journey?).to eq(false)
+    end
+
+  end
+
 end
