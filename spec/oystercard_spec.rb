@@ -18,7 +18,7 @@ describe Oystercard do
     end
 
     it "should throw error when top up exceeds maximum amount" do
-      error_message = "Exceeds maximum top up amount"
+      error_message = "Exceeds £#{Oystercard::MAX_AMOUNT} top up limit"
       expect{ oystercard.top_up 91 }.to raise_error error_message
     end
 
