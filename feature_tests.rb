@@ -2,4 +2,5 @@ require './lib/oystercard.rb'
 
 card = Oystercard.new
 
-balance = card.balance?
+card.balance
+card.top_up(amount) 
