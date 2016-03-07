@@ -13,10 +13,14 @@ class Oystercard
     @balance += amount
   end
 
+  def deduct(fare)
+    @balance -= fare
+  end
+
   private
 
-  def max_exceeded?(amount)
-    @balance + amount > MAX_AMOUNT
-  end
+    def max_exceeded?(amount)
+      @balance + amount > MAX_AMOUNT
+    end
 
 end

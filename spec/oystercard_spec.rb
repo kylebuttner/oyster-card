@@ -1,6 +1,7 @@
 require 'oystercard'
 
 describe Oystercard do
+
   subject(:oystercard) { described_class.new }
 
   describe "new card" do
@@ -24,5 +25,12 @@ describe Oystercard do
 
   end
 
+  describe "#deduct" do
+
+    it "deducts fare from balance" do
+      oystercard.top_up(10)
+      expect {oystercard.deduct(5)}.to change{ oystercard.balance}.by -5
+    end
+  end
 
 end
