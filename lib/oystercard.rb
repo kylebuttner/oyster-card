@@ -1,11 +1,10 @@
 class Oystercard
+  DEFAULT_BALANCE = 0
+  MIN_FAIR = 1
 
-DEFAULT_BALANCE = 0
-MIN_FAIR = 1
-
-  def initialize(balance=DEFAULT_BALANCE)
+  attr_reader :entrance
+  def initialize(_balance = DEFAULT_BALANCE)
     @balance = DEFAULT_BALANCE
-    @status = false
   end
 
   def check_balance
@@ -18,27 +17,26 @@ MIN_FAIR = 1
   end
 
   def in_journey?
-    @status
+    @entrance
   end
 
-  def touch_in
-    raise "balance to low" if @balance<= MIN_FAIR
-    @status= true
+  def touch_in(station)
+    raise 'balance to low' if @balance <= MIN_FAIR
+    @status = true
+    @entrance = station
   end
 
   def touch_out
     deduct
-    @status= false
+    @status = false
+    @entrance = nil
   end
 
-private
+  private
 
-  def balance
-    @balance
-  end
+  attr_reader :balance
 
-    def deduct(value=MIN_FAIR)
+  def deduct(value = MIN_FAIR)
     @balance -= value
   end
-
 end
