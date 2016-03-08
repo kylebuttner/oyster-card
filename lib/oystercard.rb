@@ -2,9 +2,12 @@ class Oystercard
   DEFAULT_BALANCE = 0
   MIN_FAIR = 1
 
-  attr_reader :entrance
+  attr_reader :entrance, :exit, :journey, :history
+
   def initialize(_balance = DEFAULT_BALANCE)
     @balance = DEFAULT_BALANCE
+    @history = []
+    @journey = Hash.new
   end
 
   def check_balance
@@ -22,14 +25,20 @@ class Oystercard
 
   def touch_in(station)
     raise 'balance to low' if @balance <= MIN_FAIR
-    @status = true
     @entrance = station
   end
 
-  def touch_out
+  def touch_out(station)
     deduct
-    @status = false
+    @exit = station
+    store_journey
+  end
+
+  def store_journey
+    journey[@entrance] = @exit
+    @history << @journey
     @entrance = nil
+    #@exit = nil
   end
 
   private
