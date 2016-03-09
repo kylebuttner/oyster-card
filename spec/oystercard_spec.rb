@@ -69,9 +69,9 @@ describe Oystercard do
     end
   end
 
-  describe '#log' do
+  describe '#journey' do
     it 'expects the journey log to be empty' do
-      expect(subject.log).to eq nil
+      expect(subject.journey).to eq nil
     end
 
     it 'records a journey' do
