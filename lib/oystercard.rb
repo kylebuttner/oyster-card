@@ -3,11 +3,11 @@ class Oystercard
   CARD_LIMIT = 90
   MIN_AMOUNT = 1
 
-  attr_reader :balance, :entry_station, :journeys, :journey_index, :current_journey
+  attr_reader :balance, :entry_station, :journey_log, :journey_index, :current_journey
 
   def initialize
     @balance = 0
-    @journeys = {}
+    @journey_log = []
     @journey_index = 0
   end
 
@@ -17,20 +17,24 @@ class Oystercard
   end
 
   def touch_in(station)
-    fail "This card is already in journey." if in_journey?
-    fail "Card balance is too low." if below_min?
     @current_journey = Journey.new
-    # current_journey.start(station)
-    @entry_station = station
+    # fail "This card is already in journey." if in_journey?
+    fail "Card balance is too low." if below_min?
+    @current_journey.start(station)
+    @journey_log << @current_journey
     increment_journey_index
     @journeys[journey_index] = { :in => station }                                                  # does this violate SRP?
   end
 
   def touch_out(station)
-    fail "This card is not in journey." unless in_journey?
-    deduct(MIN_AMOUNT)
-    @entry_station = nil
-    @journeys[journey_index][:out] = station
+    @journey_log << (@current_journey = Journey.new) if @journey_log.empty?
+    if @journey_log[-1].exit_station.nil?
+      @journey_log[-1].finish(station)
+    else
+      @journey_log << (@current_journey = Journey.new)
+      @journey_log.finish(station)
+    end
+    deduct(@current_journey.fare)
   end
 
   def increment_journey_index
@@ -40,7 +44,7 @@ class Oystercard
   private
 
     def in_journey?
-      !@entry_station.nil?
+      !@current_journey.complete?
     end
 
     def exceeds_max?(amount)

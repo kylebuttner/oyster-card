@@ -24,90 +24,41 @@ describe Oystercard do
         expect{ card.top_up 1 }.to raise_error "Card balance may not exceed £#{max_balance}"
       end
     end
-
-    # describe "#deduct" do
-    #   it 'should reduce the balance on the card' do
-    #     expect{ card.deduct 3 }.to change{ card.balance }.by -3
-    #   end
-    # end
   end
 
   context 'Oystercard actions' do
 
     describe '#touch_in' do
-      it 'should set in_journey? to true' do
-        card.top_up(5)
-        card.touch_in(station)
-        expect(card.instance_variable_get(:@entry_station)).to be_truthy
-      end
-      it 'should set the entry station after touch in' do
-        card.top_up(5)
-        card.touch_in(station)
-        expect(card.entry_station).to eq station
-      end
       it 'should create a journey object' do
         card.top_up(5)
         card.touch_in(station)
         expect(card.current_journey).to be_an_instance_of Journey
       end
-      # it 'should call start method on a current_journey' do
+      # it 'should prevent card in journey from touching in' do
       #   card.top_up(5)
       #   card.touch_in(station)
-      #   expect(card.current_journey).to receive(:start)
+      #   expect{ card.touch_in(station) }.to raise_error "This card is already in journey."
       # end
-
-      it 'should prevent card in journey from touching in' do
-        card.top_up(5)
-        card.touch_in(station)
-        expect{ card.touch_in(station) }.to raise_error "This card is already in journey."
-      end
       it 'should raise an error if balance is below mininum amount' do
         expect { card.touch_in(station) }.to raise_error "Card balance is too low."
       end
     end
 
     describe '#touch_out' do
-      it 'should set in_journey? to false' do
-        card.top_up(5)
-        card.touch_in(station)
-        card.touch_out(station)
-        expect(card.instance_variable_get(:@entry_station)).to be_falsey
-      end
-      it 'should prevent card not in journey from touching out' do
-        expect{ card.touch_out(station) }.to raise_error "This card is not in journey."
+      it 'should charge penalty fare for invalid touch out' do
+        expect{ card.touch_out(station) }.to change{ card.balance }.by -6
       end
       it 'should deduct card balance by minimum amount' do
         card.top_up(5)
         card.touch_in(station)
         expect{ card.touch_out(station) }.to change{ card.balance }.by -1
       end
-      it 'set entry station to nil' do
-        card.top_up(5)
-        card.touch_in(station)
-        card.touch_out(station)
-        expect(card.entry_station).to eq nil
-      end
     end
 
     context 'Oystercard journeys' do
       describe 'should store journey history' do
         it 'should return a hash' do
-          expect(card.journeys).to be_a(Hash)
-        end
-        it 'should increment journey_index by 1' do
-          card.top_up(5)
-          expect{ card.touch_in(station) }.to change{ card.journey_index }.by 1
-        end
-        it 'should add in station on touch in to journey history' do
-          card.top_up(5)
-          card.touch_in(station)
-          expect(card.journeys).to include( 1 => { :in => station } )
-        end
-        it 'should add out station on touch out to journey history' do
-          card.top_up(5)
-          card.touch_in(station)
-          card.touch_out(station2)
-          expect(card.journeys).to include( 1 => { :in => station, :out => station2 } )
+          expect(card.journey_log).to be_a(Array)
         end
       end
     end
