@@ -1,7 +1,7 @@
 class Oystercard
   DEFAULT_BALANCE = 0
-  PEN_FARE = 6
   MAX_BALANCE = 90
+  MIN_FARE = 1
 
   attr_reader :entrance, :exit, :journey, :journeylog
 
@@ -24,12 +24,13 @@ class Oystercard
   end
 
   def touch_in(station)
-    raise 'balance too low' if @balance <= Journey::MIN_FARE
+    raise 'balance too low' if @balance <= MIN_FARE
     @journeylog.start(station)
+    deduct if journeylog.deduct?
   end
 
   def touch_out(station)
-    @journeylog.end(station)
+    @journeylog.finish(station)
     deduct
   end
 
@@ -40,5 +41,6 @@ class Oystercard
   def deduct(value=@journeylog.fare)
       @balance -= value
       @balance
+      journeylog.deduct=true
   end
 end

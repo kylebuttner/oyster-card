@@ -1,24 +1,31 @@
 class Journey
 
 PRICE_PER_ZONE = 1
-MIN_FARE = 1
 
+attr_reader :entrance, :exit
   def initialize
     @price_per_zone
-    @start = :nil
-    @end = :nil
+    @entrance = :nil
+    @exit = :nil
   end
 
   def start(station)
-    @start = station
+    @entrance = station
   end
 
   def end(station)
-    @end = station
+    @exit = station
   end
 
   def complete?
-    true
+    if @entrance == :nil && @exit != :nil
+      false
+    elsif
+      @entrance != :nil && @exit == :nil
+      false
+    else
+      true
+    end
   end
 
 end

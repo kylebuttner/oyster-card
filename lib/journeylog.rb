@@ -1,43 +1,72 @@
 require_relative 'journey'
 
+PEN_FARE = 6
+
 class Journeylog
 
   attr_reader :log, :journey
-
+  attr_accessor :deduct
   def initialize
     @log = []
     @start = :nil
     @end = :nil
+    @journey = nil
+    @complete = nil
+    @deduct=false
   end
 
   def start(station)
-    # if @journey.class == Journey
-    #   store_journey
-    #   deduct(PEN_FARE)
-    # end
-    @journey = Journey.new
-    @journey.start(station)
+    if @journey == nil
+      @journey = Journey.new
+      @journey.start(station)
+    else 
+      store_journey
+      @deduct = true
+      @journey = Journey.new
+      @journey.start(station)
+    end
   end
 
-  def end(station)
-    # if @journey.class != Journey
-    #   @journey = @journey_class.new
-    #   @journey.end(station)
-    #   deduct(PEN_FARE)
-    # else
+  def finish(station)
+    if @journey == nil
+      @journey = Journey.new
       @journey.end(station)
-      # deduct
-    #end
-    store_journey
+      store_journey
+      @deduct = true
+    else
+      @journey.end(station)
+      store_journey
+      @deduct = true
+    end
+  end
+
+  def journeys
+    @log
   end
 
   def store_journey
+    @fare = @journey.complete? ? 1 : 6
     @log << @journey
+    @journey = nil
   end
 
   def fare
-    @journey.complete? ? 1 : 6
+    @fare
+    
     #((@end.zone) - (@start.zone))*@price_per_zone
   end
 
+  def deduct?
+    @deduct
+  end
+
+private
+
+  def current_journey
+    if @journey != nil
+      return @journey
+      else 
+        @journey = Journey.new
+    end
+  end
 end
