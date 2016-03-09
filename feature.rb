@@ -23,14 +23,13 @@ oyster.touch_in(kings_cross)
 
 oyster.check_balance
 
-oyster.journeylog.log
 
 
-#oyster.touch_out(aldgate)
+oyster.touch_out(aldgate)
 
-#oyster.touch_out(kings_cross)
-p oyster.journeylog.current_journey
-oyster.check_balance
+oyster.touch_out(kings_cross)
+
+p oyster.check_balance
 
 
 #binding.pry
