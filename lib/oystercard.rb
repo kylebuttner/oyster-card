@@ -19,6 +19,7 @@ class Oystercard
   def touch_in(station)
     fail "This card is already in journey." if in_journey?
     fail "Card balance is too low." if below_min?
+    # Journey.new(station)
     @entry_station = station
     increment_journey_index
     @journeys[journey_index] = { :in => station }                                                  # does this violate SRP?
