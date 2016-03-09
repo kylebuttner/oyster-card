@@ -45,6 +45,16 @@ describe Oystercard do
         card.touch_in(station)
         expect(card.entry_station).to eq station
       end
+      it 'should create a journey object' do
+        card.top_up(5)
+        card.touch_in(station)
+        expect(card.current_journey).to be_an_instance_of Journey
+      end
+      # it 'should call start method on a current_journey' do
+      #   card.top_up(5)
+      #   card.touch_in(station)
+      #   expect(card.current_journey).to receive(:start)
+      # end
 
       it 'should prevent card in journey from touching in' do
         card.top_up(5)
