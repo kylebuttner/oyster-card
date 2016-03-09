@@ -32,13 +32,20 @@ describe Oystercard do
       it 'should create a journey object' do
         card.top_up(5)
         card.touch_in(station)
-        expect(card.current_journey).to be_an_instance_of Journey
+        expect(card.journey_log[-1]).to be_an_instance_of Journey
       end
-      # it 'should prevent card in journey from touching in' do
-      #   card.top_up(5)
-      #   card.touch_in(station)
-      #   expect{ card.touch_in(station) }.to raise_error "This card is already in journey."
-      # end
+      it 'should check whether previous journey was complete' do
+        card.top_up(10)
+        card.touch_in(station)
+        card.touch_in(station)
+        expect(card.previous_journey_complete?).to eq false
+      end
+      it 'should deduct penalty fare for incomplete previous journey' do
+        card.top_up(10)
+        card.touch_in(station)
+        card.touch_in(station)
+        expect(card.balance).to eq 10 - Oystercard::PENALTY_FARE
+      end
       it 'should raise an error if balance is below mininum amount' do
         expect { card.touch_in(station) }.to raise_error "Card balance is too low."
       end
@@ -52,6 +59,20 @@ describe Oystercard do
         card.top_up(5)
         card.touch_in(station)
         expect{ card.touch_out(station) }.to change{ card.balance }.by -1
+      end
+    end
+
+    describe '#previous_journey_complete?' do
+      it 'should return true for complete previous journey' do
+        card.top_up(5)
+        card.touch_in(station)
+        card.touch_out(station)
+        expect(card.previous_journey_complete?).to eq true
+      end
+      it 'should return false for incomplete previous journey' do
+        card.top_up(5)
+        card.touch_out(station)
+        expect(card.previous_journey_complete?).to eq false
       end
     end
 
