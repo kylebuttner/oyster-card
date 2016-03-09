@@ -8,36 +8,30 @@ class Journeylog
   attr_accessor :deduct
   def initialize
     @log = []
-    @start = :nil
-    @end = :nil
     @journey = nil
     @complete = nil
-    @deduct=false
+    @deduct = false
+    @current = {}
   end
 
   def start(station)
-    if @journey == nil
-      @journey = Journey.new
-      @journey.start(station)
-    else 
+    if @journey != nil
+      current_journey
       store_journey
       @deduct = true
-      @journey = Journey.new
-      @journey.start(station)
     end
+    current_journey
+    @journey.start(station)
   end
 
   def finish(station)
     if @journey == nil
-      @journey = Journey.new
-      @journey.end(station)
-      store_journey
-      @deduct = true
-    else
-      @journey.end(station)
-      store_journey
-      @deduct = true
+      current_journey
     end
+      @journey.end(station)
+      @current[@journey.entrance] = @journey.end(station)
+      store_journey
+      @deduct = true
   end
 
   def journeys
@@ -46,14 +40,13 @@ class Journeylog
 
   def store_journey
     @fare = @journey.complete? ? 1 : 6
-    @log << @journey
+    @log << @current
     @journey = nil
+    @current = {}
   end
 
   def fare
     @fare
-    
-    #((@end.zone) - (@start.zone))*@price_per_zone
   end
 
   def deduct?
@@ -64,8 +57,8 @@ private
 
   def current_journey
     if @journey != nil
-      return @journey
-      else 
+      @current[@journey.entrance] = nil
+      else
         @journey = Journey.new
     end
   end

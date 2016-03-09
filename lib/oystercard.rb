@@ -38,9 +38,9 @@ class Oystercard
 
   attr_reader :balance
 
-  def deduct(value=@journeylog.fare)
+  def deduct(value = @journeylog.fare)
       @balance -= value
       @balance
-      journeylog.deduct=true
+      journeylog.deduct = true
   end
 end

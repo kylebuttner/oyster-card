@@ -14,7 +14,7 @@ attr_reader :entrance, :exit
   end
 
   def end(station)
-    @exit = station
+    @end = station
   end
 
   def complete?
