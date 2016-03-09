@@ -1,10 +1,13 @@
+require 'pry'
 require_relative './lib/oystercard.rb'
 require_relative './lib/station.rb'
 require_relative './lib/journey.rb'
+require_relative './lib/journeylog.rb'
 
-oyster = Oystercard.new(Journey)
+oyster = Oystercard.new(Journeylog)
 aldgate = Station.new('aldgate', 2)
 kings_cross = Station.new('kings cross', 1)
+journeylog = Journeylog.new
 oyster.check_balance
 
 
@@ -18,6 +21,9 @@ oyster.touch_in(aldgate)
 oyster.touch_out(kings_cross)
 
 p oyster.check_balance
+
+#binding.pry
+p oyster.journeylog.log
 
 
 =begin

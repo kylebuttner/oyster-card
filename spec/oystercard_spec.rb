@@ -1,8 +1,8 @@
 require 'oystercard'
 
 describe Oystercard do
-  
-  let(:journey_class) { double(:journey_class, new: journey) } 
+
+  let(:journey_class) { double(:journey_class, new: journey) }
   let(:journey) {double(:journey, start: entrance_stat, end: exit_stat, class: Journey, fare: 1)}
   let(:card) { described_class.new(journey_class) }
   let(:entrance_stat) { double(:station) }
@@ -67,7 +67,7 @@ describe Oystercard do
       expect(card.history).to be_empty
     end
 
-    it 'should create a journey' do 
+    it 'should create a journey' do
       card.top_up(10)
       card.touch_in(entrance_stat)
       card.touch_out(exit_stat)

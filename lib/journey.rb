@@ -1,9 +1,7 @@
 class Journey
 
 PRICE_PER_ZONE = 1
-MIN_FAIR = 1
-
-attr_reader :gate_status, :current
+MIN_FARE = 1
 
   def initialize
     @price_per_zone
@@ -12,16 +10,15 @@ attr_reader :gate_status, :current
   end
 
   def start(station)
-    @start = station    
+    @start = station
   end
 
   def end(station)
     @end = station
   end
 
-  def fare
-    1
-    #((@end.zone) - (@start.zone))*@price_per_zone
+  def complete?
+    true
   end
 
 end

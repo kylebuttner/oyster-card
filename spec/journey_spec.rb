@@ -1,13 +1,13 @@
 require 'journey'
 
 
-describe Journey do 
+describe Journey do
 
 let(:aldgate) {double(:station)}
 let(:kings_cross) {double(:station)}
 let(:card) {double(:card, entrance: kings_cross, exit: aldgate)}
 
-  
+
     it 'should know the journey start' do
       expect(subject.start(card.entrance)).to eq kings_cross
     end
