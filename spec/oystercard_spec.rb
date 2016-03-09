@@ -2,9 +2,13 @@ require 'oystercard'
 
 describe Oystercard do
   let(:card) { described_class.new}
+  let(:station) { double :station}
+  let(:entry) { double :entry }
+  let(:exit) { double :exit }
 
   before do
     card.top_up(20)
+    card.touch_in(station)
   end
 
   describe '#balance' do
@@ -26,32 +30,55 @@ describe Oystercard do
 
   describe '#in_journey?' do
     it 'card not in use' do
-      expect(card).not_to be_in_journey
+      expect(subject).not_to be_in_journey
     end
   end
 
   describe '#touch_in' do
+    it 'saves entry station' do
+      expect(card.entry).to eq station
+    end
+
     it 'card is in journey' do
-      card.touch_in
       expect(card.in_journey?).to eq true
     end
 
     it 'raises error when balance insufficient' do
-
       message = "Error insufficient funds"
-      expect{ subject.touch_in }.to raise_error message
+      expect{ subject.touch_in(station) }.to raise_error message
     end
   end
 
   describe '#touch_out' do
     it 'card is not in journey' do
-      card.touch_in
-      card.touch_out
+      card.touch_out(station)
       expect(card.in_journey?).to eq false
     end
 
-   it 'deducts fare from balance' do
-     expect{ card.touch_out }.to change{ card.balance }.by -3
-   end
+    it 'deducts fare from balance' do
+      expect{ card.touch_out(station) }.to change{ card.balance }.by -Oystercard::MIN_FARE
+    end
+
+    it 'sets the entry station to nil' do
+      card.touch_out(station)
+      expect(card.entry).to eq nil
+    end
+
+    it 'saves the exit station' do
+      card.touch_out(station)
+      expect(card.exit).to eq station
+    end
   end
+
+  describe '#journey' do
+    it 'expects the journey log to be empty' do
+      expect(subject.journey).to be_empty
+    end
+
+    it 'records a journey' do
+      card.touch_out(station)
+      expect(card.journey_log).to eq station=>station
+    end
+  end
+
 end
