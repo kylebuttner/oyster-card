@@ -11,11 +11,17 @@ oyster.check_balance
 
 oyster.top_up(20)
 
-oyster.touch_in(aldgate, 'in')
 
-oyster.touch_out(kings_cross, 'out')
 
-p osyter.balance
+oyster.touch_in(aldgate)
+
+oyster.touch_in(kings_cross)
+
+oyster.touch_out(aldgate)
+
+p oyster.balance
+
+p oyster.history
 
 =begin
 oyster.balance

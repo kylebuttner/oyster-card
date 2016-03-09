@@ -7,19 +7,16 @@ attr_reader :gate_status, :current
 
   def initialize
     @price_per_zone
-    @current = Hash.new
-    @history = []
-    @gate_status = 'out'
+    @start = :nil
+    @end = :nil
   end
 
-  def start(station, barrier)
-      @gate =   
-      @start = station  
+  def start(station)
+    @start = station    
   end
 
-  def end(station, gate)
-    @current  = Hash.new[@start] = station
-    @start = nil
+  def end(station)
+    @end = station
   end
 
   def fare
