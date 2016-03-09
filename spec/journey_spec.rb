@@ -18,7 +18,7 @@ let(:card) {double(:card, entrance: kings_cross, exit: aldgate)}
 
   describe 'Price' do
     it 'should calculate a price for a journey' do
-      expect(subject.price).to eq 2
+      expect(subject.fare).to eq 1
     end
   end
 end

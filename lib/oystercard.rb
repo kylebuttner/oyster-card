@@ -3,7 +3,7 @@ class Oystercard
   PEN_FARE = 6
 
 
-  attr_reader :entrance, :exit, :history, :journey, :balance
+  attr_reader :entrance, :exit, :history, :journey
 
   def initialize(journey, balance = DEFAULT_BALANCE)
     @balance = DEFAULT_BALANCE
@@ -52,7 +52,7 @@ class Oystercard
 
   private
 
-  
+  attr_reader :balance
 
   def deduct(value=journey.fare)
       @balance -= value
