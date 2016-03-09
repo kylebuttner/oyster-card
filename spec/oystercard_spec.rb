@@ -2,13 +2,12 @@ require 'oystercard'
 
 describe Oystercard do
   let(:card) { described_class.new}
-  let(:station) { double :station}
-  let(:entry) { double :entry }
-  let(:exit) { double :exit }
+  let(:entry_station) { double :station}
+  let(:exit_station) { double :station }
 
   before do
     card.top_up(20)
-    card.touch_in(station)
+    card.touch_in(entry_station)
   end
 
   describe '#balance' do
@@ -36,7 +35,7 @@ describe Oystercard do
 
   describe '#touch_in' do
     it 'saves entry station' do
-      expect(card.entry).to eq station
+      expect(card.entry_station).to eq entry_station
     end
 
     it 'card is in journey' do
@@ -45,39 +44,39 @@ describe Oystercard do
 
     it 'raises error when balance insufficient' do
       message = "Error insufficient funds"
-      expect{ subject.touch_in(station) }.to raise_error message
+      expect{ subject.touch_in(entry_station) }.to raise_error message
     end
   end
 
   describe '#touch_out' do
     it 'card is not in journey' do
-      card.touch_out(station)
+      card.touch_out(exit_station)
       expect(card.in_journey?).to eq false
     end
 
     it 'deducts fare from balance' do
-      expect{ card.touch_out(station) }.to change{ card.balance }.by -Oystercard::MIN_FARE
+      expect{ card.touch_out(exit_station) }.to change{ card.balance }.by -Oystercard::MIN_FARE
     end
 
     it 'sets the entry station to nil' do
-      card.touch_out(station)
-      expect(card.entry).to eq nil
+      card.touch_out(exit_station)
+      expect(card.entry_station).to eq nil
     end
 
     it 'saves the exit station' do
-      card.touch_out(station)
-      expect(card.exit).to eq station
+      card.touch_out(exit_station)
+      expect(card.exit_station).to eq exit_station
     end
   end
 
   describe '#journey' do
     it 'expects the journey log to be empty' do
-      expect(subject.journey).to be_empty
+      expect(subject.journey).to eq nil
     end
 
     it 'records a journey' do
-      card.touch_out(station)
-      expect(card.journey_log).to eq station=>station
+      card.touch_out(exit_station)
+      expect(card.journey_log).to eq entry_station=>exit_station
     end
   end
 
