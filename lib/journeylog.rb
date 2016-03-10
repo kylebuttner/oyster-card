@@ -5,7 +5,7 @@ PEN_FARE = 6
 class Journeylog
 
   attr_accessor :deduct
-  
+
   def journeys
     @log
   end
@@ -27,7 +27,6 @@ class Journeylog
     store_journey
     @deduct = true
   end
-
 
   def store_journey
     @fare = @journey.complete? ? Oystercard::MIN_FARE : PEN_FARE

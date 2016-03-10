@@ -3,6 +3,7 @@ class Journey
 PRICE_PER_ZONE = 1
 
 attr_reader :entrance, :exit
+
   def initialize
     @price_per_zone
     @entrance = :nil
@@ -20,8 +21,7 @@ attr_reader :entrance, :exit
   def complete?
     if @entrance == :nil && @exit != :nil
       false
-    elsif
-      @entrance != :nil && @exit == :nil
+    elsif @entrance != :nil && @exit == :nil
       false
     else
       true
