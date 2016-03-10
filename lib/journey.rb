@@ -19,6 +19,10 @@ attr_reader :entrance, :exit, :zones_crossed
     @zones_crossed = (@entrance.zone - @exit.zone).abs if complete?
   end
 
+  def store_fare(value)
+    @fare = value
+  end
+
   def complete?
     if @entrance == :nil && @exit != :nil
       false

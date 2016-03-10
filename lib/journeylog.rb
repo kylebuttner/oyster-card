@@ -1,59 +1,56 @@
-require_relative 'journey'
-
-PEN_FARE = 6
-
 class Journeylog
 
-  attr_reader :journey
-  attr_accessor :deduct
-
-  def journeys
-    @log
-  end
+  attr_reader :current_journey, :fare
 
   def initialize
-    @log = []
+    @journeys = []
     @deduct = false
   end
 
   def start(station)
     @deduct = false
-    edge_case if @journey != nil
-    current_journey
-    @journey.start(station)
+    charge_penalty && store_journey_info if previous_journey_incomplete?
+    current_journey.start(station)
   end
 
   def finish(station)
-    current_journey if @journey == nil
-    @journey.end(station)
-    store_journey
+    current_journey.end(station)
+    current_journey.entrance.nil? ? charge_penalty : charge_fare
+    store_journey_info
     @deduct = true
-  end
-
-  def store_journey
-    @fare = @journey.complete? ? (@journey.zones_crossed + 1) : PEN_FARE
-    @log << @journey
-    @journey = nil
-  end
-
-  def edge_case
-    current_journey
-    store_journey
-    @deduct = true
-  end
-
-  def fare
-    @fare
   end
 
   def deduct?
     @deduct
   end
 
+  def journeys
+    @journeys.dup
+  end
+
+  def previous_journey_incomplete?
+    @current_journey != nil
+  end
+
 private
 
   def current_journey
-    return @journey || @journey = Journey.new
+    return @current_journey || @current_journey = Journey.new
   end
 
+  def charge_penalty
+    @fare = Oystercard::PEN_FARE
+    @deduct = true
+  end
+
+  def charge_fare
+    @fare = @current_journey.zones_crossed + 1
+  end
+
+  def store_journey_info
+    @journeys << @current_journey
+    @current_journey.store_fare(fare)
+    @current_journey = nil
+  end
+  
 end

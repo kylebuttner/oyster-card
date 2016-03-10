@@ -2,25 +2,22 @@ class Oystercard
   DEFAULT_BALANCE = 0
   MAX_BALANCE = 90
   MIN_FARE = 1
+  PEN_FARE = 6
 
-  attr_reader :entrance, :exit, :journey, :journeylog
+  attr_reader :journeylog, :balance
 
-  def initialize(journeylog, balance = DEFAULT_BALANCE)
+  def initialize(journeylog = Journeylog)
     @balance = DEFAULT_BALANCE
     @journeylog = journeylog.new
   end
 
-  def check_balance
-    @balance
-  end
-
   def top_up(value)
-    raise 'max out balance' if value + balance > MAX_BALANCE
+    raise 'max out balance' if exceeds_max?(value)
     @balance += value
   end
 
   def touch_in(station)
-    raise 'balance too low' if @balance <= MIN_FARE
+    raise 'balance too low' if low_balance?
     @journeylog.start(station)
     deduct if journeylog.deduct?
   end
@@ -32,11 +29,15 @@ class Oystercard
 
   private
 
-  attr_reader :balance
+  def deduct
+      @balance -= @journeylog.fare
+  end
 
-  def deduct(value = @journeylog.fare)
-      @balance -= value
-      @balance
-      # journeylog.deduct = true
+  def exceeds_max?(value)
+    value + balance > MAX_BALANCE
+  end
+
+  def low_balance?
+    @balance <= MIN_FARE
   end
 end

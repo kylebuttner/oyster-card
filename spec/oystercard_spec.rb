@@ -11,7 +11,7 @@ describe Oystercard do
 
   describe 'Balance' do
     it 'starts with a balance of 0' do
-      expect(card.check_balance).to eq 0
+      expect(card.balance).to eq 0
     end
   end
 
@@ -42,7 +42,7 @@ describe Oystercard do
     it 'should deduct MIN_FARE' do
       card.top_up(5)
       card.touch_in(entrance_stat)
-      expect { card.touch_out(exit_stat) }.to change { card.check_balance }.by(-1)
+      expect { card.touch_out(exit_stat) }.to change { card.balance }.by(-1)
     end
   end
 

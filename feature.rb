@@ -4,52 +4,10 @@ require_relative './lib/station.rb'
 require_relative './lib/journey.rb'
 require_relative './lib/journeylog.rb'
 
-oyster = Oystercard.new(Journeylog)
-aldgate = Station.new('aldgate', 2)
-kings_cross = Station.new('kings cross', 1)
-journeylog = Journeylog.new
-oyster.check_balance
+o = Oystercard.new
+s1 = Station.new('aldgate', 2)
+s2 = Station.new('kings cross', 1)
 
-
-
-oyster.top_up(10)
-
-
-
-oyster.touch_in(aldgate)
-
-
-oyster.touch_in(kings_cross)
-
-oyster.check_balance
-
-
-
-oyster.touch_out(aldgate)
-
-oyster.touch_out(kings_cross)
-
-p oyster.check_balance
-
-
-#binding.pry
-
-
-
-=begin
-oyster.balance
-
-journey.price(oyster.entrance, oyster.exit)
-
-
-oyster.deduct(journey.price)
-
-oyster.balance
-
-aldgate.name
-kings_cross.zone
-
-
-# oyster.deduct(18.70) check for min. balance
-# oyster.touch_in
-=end
+o.top_up 60
+o.touch_in s1
+o.touch_out s2
