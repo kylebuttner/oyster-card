@@ -32,7 +32,13 @@ describe Oystercard do
       expect{ subject.touch_in(station) }.to raise_error message
     end
 
-    it 'returns beginning of current journey' do
+    it 'charges a penatly if no touch_out' do
+      card.top_up(20)
+      card.touch_in(station)
+      expect{card.touch_in(station)}.to change {card.balance}.by -6
+    end
+
+    xit 'returns beginning of current journey' do
       card.top_up(20)
       expect(journey).to receive(:begin_journey).with('Hoxton')
       card.touch_in('Hoxton', journey)
@@ -40,7 +46,7 @@ describe Oystercard do
   end
 
   describe '#touch_out' do
-    it 'deducts fare from balance' do
+    xit 'deducts fare from balance' do
       card.top_up(20)
       card.touch_in(station)
       expect{ card.touch_out(station) }.to change{ card.balance }.by -Oystercard::MIN_FARE
