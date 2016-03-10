@@ -27,21 +27,7 @@ describe Oystercard do
     end
   end
 
-  # describe '#in_journey?' do
-  #   it 'card not in use' do
-  #     expect(subject).not_to be_in_journey
-  #   end
-  # end
-
   describe '#touch_in' do
-    # it 'saves entry station' do
-    #   expect(card.entry_station).to eq entry_station
-    # end
-
-    # it 'card is in journey' do
-    #   expect(card.in_journey?).to eq true
-    # end
-
     it 'raises error when balance insufficient' do
       message = "Error insufficient funds"
       expect{ subject.touch_in(entry_station) }.to raise_error message
@@ -49,24 +35,9 @@ describe Oystercard do
   end
 
   describe '#touch_out' do
-    # it 'card is not in journey' do
-    #   card.touch_out(exit_station)
-    #   expect(card.in_journey?).to eq false
-    # end
-
     it 'deducts fare from balance' do
       expect{ card.touch_out(exit_station) }.to change{ card.balance }.by -Oystercard::MIN_FARE
     end
-
-    # it 'sets the entry station to nil' do
-    #   card.touch_out(exit_station)
-    #   expect(card.entry_station).to eq nil
-    # end
-
-    # it 'saves the exit station' do
-    #   card.touch_out(exit_station)
-    #   expect(card.exit_station).to eq exit_station
-    # end
   end
 
   describe '#journey' do
