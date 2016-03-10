@@ -4,7 +4,7 @@ describe Oystercard do
   let(:card) { described_class.new}
   let(:entry_station) { double :station}
   let(:exit_station) { double :station }
-
+  let(:journey) {{entry: entry_station, exit: exit_station}}
   before do
     card.top_up(20)
     card.touch_in(entry_station)
@@ -47,7 +47,7 @@ describe Oystercard do
 
     it 'records a journey' do
       card.touch_out(exit_station)
-      expect(card.journeys).to include card.journey
+      expect(card.journeys).to include journey
     end
   end
 
