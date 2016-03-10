@@ -31,7 +31,7 @@ class Journeylog
   end
 
   def store_journey
-    @fare = @journey.complete? ? Oystercard::MIN_FARE : PEN_FARE
+    @fare = @journey.complete? ? (@journey.zones_crossed + 1) : PEN_FARE
     @log << @journey
     @journey = nil
   end

@@ -2,12 +2,12 @@ class Journey
 
 PRICE_PER_ZONE = 1
 
-attr_reader :entrance, :exit
+attr_reader :entrance, :exit, :zones_crossed
 
   def initialize
-    @price_per_zone
     @entrance = :nil
     @exit = :nil
+    @zones_crossed = 0
   end
 
   def start(station)
@@ -16,6 +16,7 @@ attr_reader :entrance, :exit
 
   def end(station)
     @exit = station
+    @zones_crossed = (@entrance.zone - @exit.zone).abs if complete?
   end
 
   def complete?

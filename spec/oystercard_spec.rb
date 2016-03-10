@@ -2,11 +2,13 @@ require 'oystercard'
 
 describe Oystercard do
 
-  let(:journey_class) { double(:journey_class, new: journey) }
-  let(:journey) {double(:journey, start: entrance_stat, end: exit_stat, class: Journey, fare: 1)}
+  let(:journey_class) { double(:journey_class, new: journeylog) }
+  let(:journey) {double(:journey, start: entrance_stat, end: exit_stat)}
   let(:card) { described_class.new(journey_class) }
   let(:entrance_stat) { double(:station) }
   let(:exit_stat) { double(:station) }
+  let(:journeylog) { double(:journeylog, deduct?: true, start: entrance_stat, finish: exit_stat, fare: 1)}
+
   describe 'Balance' do
     it 'starts with a balance of 0' do
       expect(card.check_balance).to eq 0
@@ -29,49 +31,18 @@ describe Oystercard do
   end
 
   describe 'touch in' do
-    it 'should raise error if balance < MIN_FAIR' do
+    it 'should raise error if balance < MIN_FARE' do
       expect { card.touch_in(entrance_stat) }.to raise_error(RuntimeError)
     end
 
-    it 'remembers the station' do
-      card.top_up(5)
-      card.touch_in entrance_stat
-      expect(card.journey.start).to eq entrance_stat
-    end
   end
 
   describe 'touch out' do
-    it 'should change to "false"' do
-      card.top_up(10)
-      card.touch_in entrance_stat
-      card.touch_out exit_stat
-      expect(card).not_to be_in_journey
-    end
 
-    it 'remembers the station' do
-      card.top_up(10)
-      card.touch_in entrance_stat
-      card.touch_out(exit_stat)
-      expect(card.journey.end).to be exit_stat
-    end
-
-    it 'should deduct MIN_FAIR' do
+    it 'should deduct MIN_FARE' do
       card.top_up(5)
       card.touch_in(entrance_stat)
       expect { card.touch_out(exit_stat) }.to change { card.check_balance }.by(-1)
-    end
-  end
-
-  describe 'Journey Hist.' do
-    it 'should be empty by default' do
-      expect(card.history).to be_empty
-    end
-
-    it 'should create a journey' do
-      card.top_up(10)
-      card.touch_in(entrance_stat)
-      card.touch_out(exit_stat)
-      expect(card.history).to include(journey)
     end
   end
 

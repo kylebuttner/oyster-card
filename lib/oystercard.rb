@@ -19,10 +19,6 @@ class Oystercard
     @balance += value
   end
 
-  def in_journey?
-    @entrance
-  end
-
   def touch_in(station)
     raise 'balance too low' if @balance <= MIN_FARE
     @journeylog.start(station)
@@ -41,6 +37,6 @@ class Oystercard
   def deduct(value = @journeylog.fare)
       @balance -= value
       @balance
-      journeylog.deduct = true
+      # journeylog.deduct = true
   end
 end
