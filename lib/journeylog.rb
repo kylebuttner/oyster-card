@@ -4,6 +4,7 @@ PEN_FARE = 6
 
 class Journeylog
 
+  attr_reader :journey
   attr_accessor :deduct
 
   def journeys
@@ -16,6 +17,7 @@ class Journeylog
   end
 
   def start(station)
+    @deduct = false
     edge_case if @journey != nil
     current_journey
     @journey.start(station)
