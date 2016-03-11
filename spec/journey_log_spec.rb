@@ -33,13 +33,30 @@ describe JourneyLog do
       journey_log.end(station)
       expect(journey_log.journeys.count).to eq 2
     end
+
+    it 'should push journey into history' do
+      allow(journey_class).to receive(:complete?).and_return true
+      journey_log.start(station)
+      journey_log.end(station2)
+      expect(journey_log.journeys.last).to eq journey_class
+    end
   end
 
   describe '#journeys' do
     it 'returns a duplicate of the journey history' do
+      allow(journey_class).to receive(:complete?).and_return true
       journey_log.start(station)
       journey_log.end(station2)
-      expect(journey_log.journeys).to be [{entry: station, exit: station2}]
+      expect(journey_log.journeys).to be_an(Array)
+    end
+  end
+
+  describe "#previous_journey_incomplete?" do
+    it 'returns whether previous journey was completed' do
+      allow(journey_class).to receive(:complete?).and_return true
+      journey_log.start(station)
+      journey_log.end(station)
+      expect(journey_log.previous_journey_incomplete?).to be false
     end
   end
 end

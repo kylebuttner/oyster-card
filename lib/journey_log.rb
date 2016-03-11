@@ -19,6 +19,9 @@ class JourneyLog
     @history.dup
   end
 
+  def previous_journey_incomplete?
+    !@history.last.complete? unless @history.empty?
+  end
 
   private
 

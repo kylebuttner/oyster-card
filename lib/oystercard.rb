@@ -6,6 +6,7 @@ class Oystercard
   MAX_LIMIT = 90
   MIN_LIMIT = 1
   MIN_FARE  = 2
+  PENALTY_FARE = 6
 
   def initialize(journey_log = JourneyLog)
     @balance = 0
@@ -21,15 +22,19 @@ class Oystercard
   def touch_in(station)
     error = "Error insufficient funds"
     raise error if @balance < MIN_LIMIT
-    if @journey_log.current[:entry] != nil
-      @balance -= @journey.fare
-    end
+    charge_penalty if @journey_log.previous_journey_incomplete?
     @journey_log.start(station)
   end
 
   def touch_out(station)
     @journey_log.end(station)
-    @balance -= journey_log.fare
-    @journey_log.reset
+    charge_penalty if @journey_log.previous_journey_incomplete?
+    @balance -= MIN_FARE if !@journey_log.previous_journey_incomplete?
+  end
+
+  private
+
+  def charge_penalty
+    @balance -= PENALTY_FARE
   end
 end

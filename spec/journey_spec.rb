@@ -8,18 +8,10 @@ describe Journey do
   let(:current2) {{ entry: station, exit: station2}}
   let(:card) { double:card}
 
-  it 'initializes with an empty current journey' do
-    expect(journey.current).to eq current
-  end
-
-  it 'initializes with and empty journey log' do
-    expect(journey.history).to be_empty
-  end
-
   describe '#begin_journey' do
     it 'sets an entry station' do
       journey.begin_journey(station)
-    expect(journey.current).not_to eq current
+      expect(journey.entry_station).to eq station
     end
   end
 
@@ -27,14 +19,9 @@ describe Journey do
     it 'sets an exit station' do
       journey.begin_journey(station)
       journey.end_journey(station2)
-      expect(journey.current).to eq current2
+      expect(journey.exit_station).to eq station2
     end
 
-    it 'records journey history' do
-      journey.begin_journey(station)
-      journey.end_journey(station2)
-      expect(journey.history).to include current2
-    end
   end
 
   # describe '#fare' do
