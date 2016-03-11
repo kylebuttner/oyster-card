@@ -7,8 +7,12 @@ describe JourneyLog do
   let(:station) { double :station }
 
   describe "initialize" do
-    it 'should accept a journey_class parameter' do
-      expect(journey_log.current_journey).to eq current_journey
+    # it 'should accept a journey_class parameter' do
+    #   expect(journey_log.current_journey).to eq current_journey
+    # end
+
+    it 'should create an empty journey history' do
+      expect(journey_log.history).to be_empty
     end
   end
 

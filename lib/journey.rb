@@ -26,7 +26,7 @@ class Journey
     @current = { entry: nil, exit: nil }
   end
 
-  private
+
 
   def complete?
     if current[:entry] != nil && current[:exit] != nil
@@ -36,6 +36,7 @@ class Journey
     end
   end
 
+private
 
   def log
     @history << @current
