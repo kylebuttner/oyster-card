@@ -1,6 +1,6 @@
 class JourneyLog
 
-  attr_reader :history
+  attr_reader :journeys
 
   def initialize(journey_class = Journey)
     @journey_class = journey_class
@@ -11,10 +11,20 @@ class JourneyLog
     current_journey.begin_journey(station)
   end
 
+  def end(station)
+    current_journey.end_journey(station)
+  end
+
+  def journeys
+    @history.dup
+  end
+
+
   private
 
   def current_journey
-    @history.empty? || @history.last.complete? ? @journey_class.new : @history.last
+    @history << @journey_class.new if @history.empty? || @history.last.complete?
+    @history.last
   end
 
 end
