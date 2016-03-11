@@ -37,10 +37,10 @@ describe Journey do
     end
   end
 
-  describe '#fare' do
-    it 'charges minimum fare if current journey complete' do
-      journey.begin_journey(station)
-      journey.end_journey(station2)
-      expect(journey.
-  end
+  # describe '#fare' do
+  #   it 'charges minimum fare if current journey complete' do
+  #     journey.begin_journey(station)
+  #     journey.end_journey(station2)
+  #     expect(journey.
+  # end
 end
